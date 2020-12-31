@@ -1,0 +1,4 @@
+search functionality -> api
+added comments using vue js and API calls
+added Like button
+Profile photo removal feature

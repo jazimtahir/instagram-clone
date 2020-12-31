@@ -18,6 +18,19 @@
                          </span>
                             {{ $post->caption }}
                     </p>
+                    <div class="d-flex">
+                        <div>
+                            <like-button url="{{ url('/') }}" post-id="{{ $post->id }}" like="{{ (auth()->user()) ? auth()->user()->liked->contains($post->id) : false }}"></like-button>
+                        </div>
+                        <div class="ml-2">
+                            <a href="{{ url('/') }}/p/{{ $post->id }}">
+                                <i class="far fa-comment" style="font-size:30px; color: black"></i>
+                            </a>
+                        </div>
+                        <div class="ml-2 font-weight-bold">
+                            {{ $post->likes->count() }} Likes
+                        </div>
+                    </div>
                 </div>
             </div>
         @endforeach

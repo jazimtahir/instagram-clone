@@ -17,10 +17,10 @@
                 <div class="d-flex align-items-center pb-2">
                     <div class="h4">{{ $user->username }}</div>
                     @if(auth()->user() == NULL)
-                        <follow-button user-id="{{ $user->id }}" follow="{{ $follow }}"></follow-button>
+                        <follow-button user-id="{{ $user->id }}" follow="{{ $follow }}" url="{{ url('/') }}"></follow-button>
                     @else
                         @if(auth()->user()->id != $user->id)
-                            <follow-button user-id="{{ $user->id }}" follow="{{ $follow }}"></follow-button>
+                            <follow-button user-id="{{ $user->id }}" follow="{{ $follow }}" url="{{ url('/') }}"></follow-button>
                         @endif
                     @endif
                 </div>
@@ -51,14 +51,27 @@
                             <div class="modal-body">
                                 @foreach($user->following as $following)
                                     <div>
-                                        <a href="{{ $following->user->username }}">
-                                            <div class="d-flex align-items-baseline p-0">
-                                                <div class="pr-2">
-                                                    <img src="{{ $following->profileImage() }}" style="max-height: 40px;" class="rounded-circle img-fluid">
-                                                </div>
-                                                <div class="text-dark font-weight-bold">{{ $following->user->username }}</div>
+                                        <div class="row align-items-baseline">
+                                            <div class="col">
+                                                <a class="d-flex align-items-baseline" href="{{ $following->user->username }}">
+                                                    <div class="pr-2">
+                                                        <img src="{{ $following->profileImage() }}" style="max-height: 40px;" class="rounded-circle img-fluid">
+                                                    </div>
+                                                    <div class="text-dark font-weight-bold">
+                                                        {{ $following->user->username }}
+                                                    </div>
+                                                </a>
                                             </div>
-                                        </a>
+                                            <div class="col d-flex justify-content-end">
+                                                @if(auth()->user() == NULL)
+                                                    <follow-button user-id="{{ $following->user->id }}" follow="{{ $follow }}" url="{{ url('/') }}"></follow-button>
+                                                @else
+                                                    @if(auth()->user()->id != $following->user->id)
+                                                        <follow-button user-id="{{ $following->user->id }}" follow="{{ (auth()->user()) ? auth()->user()->following->contains($following->user->id) : false }}" url="{{ url('/') }}"></follow-button>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
                                         <div class="dropdown-divider"></div>
                                     </div>
                                 @endforeach
@@ -80,14 +93,27 @@
                             <div class="modal-body">
                                 @foreach($user->profile->followers as $follower)
                                     <div>
-                                        <a href="{{ $follower->username }}">
-                                            <div class="d-flex align-items-baseline p-0">
-                                                <div class="pr-2">
-                                                    <img src="{{ $follower->profile->profileImage() }}" style="max-height: 40px;" class="rounded-circle img-fluid">
-                                                </div>
-                                                <div class="text-dark font-weight-bold">{{ $follower->username }}</div>
+                                        <div class="row align-items-baseline">
+                                            <div class="col">
+                                                <a class="d-flex align-items-baseline" href="{{ $follower->username }}">
+                                                    <div class="pr-2">
+                                                        <img src="{{ $follower->profile->profileImage() }}" style="max-height: 40px;" class="rounded-circle img-fluid">
+                                                    </div>
+                                                    <div class="text-dark font-weight-bold">
+                                                        {{ $follower->username }}
+                                                    </div>
+                                                </a>
                                             </div>
-                                        </a>
+                                            <div class="col d-flex justify-content-end">
+                                                @if(auth()->user() == NULL)
+                                                    <follow-button user-id="{{ $follower->id }}" follow="{{ $follow }}" url="{{ url('/') }}"></follow-button>
+                                                @else
+                                                    @if(auth()->user()->id != $follower->id)
+                                                        <follow-button user-id="{{ $follower->id }}" follow="{{ (auth()->user()) ? auth()->user()->following->contains($follower->id) : false }}" url="{{ url('/') }}"></follow-button>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
                                         <div class="dropdown-divider"></div>
                                     </div>
                                 @endforeach

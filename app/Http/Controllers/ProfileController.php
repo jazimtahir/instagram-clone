@@ -63,4 +63,11 @@ class ProfileController extends Controller
 
         return redirect('/' . $user->username);
     }
+
+    public function profilePicDelete(User $user)
+    {
+        Storage::disk('public')->delete($user->profile->image);
+        auth()->user()->profile->update(['image' => NULL]);
+        return redirect('/' . $user->username);
+    }
 }

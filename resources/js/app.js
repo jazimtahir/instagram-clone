@@ -21,6 +21,9 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('follow-button', require('./components/FollowButton.vue').default);
+Vue.component('like-button', require('./components/LikeButton.vue').default);
+Vue.component('comments', require('./components/Comments.vue').default);
+Vue.component('search', require('./components/Search.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

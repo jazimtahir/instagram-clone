@@ -14,6 +14,7 @@
 Auth::routes();
 
 Route::post('follow/{user}', 'FollowController@store');
+Route::post('like/{post}', 'LikeController@store');
 
 Route::get('/{user}/password/edit', 'UserController@editPassword');
 Route::patch('/{user}/password', 'UserController@updatePassword');
@@ -21,6 +22,7 @@ Route::patch('/{user}/password', 'UserController@updatePassword');
 Route::get('/{user}', 'ProfileController@index')->name('profile.show');
 Route::patch('/{user}', 'ProfileController@update')->name('profile.update');
 Route::get('/{user}/edit', 'ProfileController@edit')->name('profile.edit');
+Route::delete('/{user}/pic/delete', 'ProfileController@profilePicDelete');
 
 Route::get('/', 'PostController@index');
 Route::post('/p', 'PostController@store');

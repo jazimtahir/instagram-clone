@@ -16,6 +16,7 @@ class PostController extends Controller
 
     public function index()
     {
+//        dd(auth()->user()->liked);
         $user = auth()->user()->following()->pluck('profiles.user_id');
         $posts = Post::whereIn('user_id', $user)->with('user')->latest()->paginate(5);
 //        $posts = Post::whereIn('user_id', $user)->orderBy('created_at', 'DESC')->get();
@@ -29,6 +30,7 @@ class PostController extends Controller
 
     public function show(Post $post){
         $follow = (auth()->user()) ? auth()->user()->following->contains($post->user->id) : false;
+
         return view('post.show', compact('post', 'follow'));
     }
 

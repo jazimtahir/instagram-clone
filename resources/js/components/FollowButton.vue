@@ -8,7 +8,7 @@
 <script>
     export default {
 
-        props: ['userId', 'follow'],
+        props: ['userId', 'follow', 'url'],
 
         mounted() {
             console.log('Component mounted.')
@@ -17,14 +17,13 @@
         data: function() {
             return {
                 status: this.follow,
-                url: 'http://localhost/insta/',
             }
         },
 
         methods: {
             followUser()
             {
-                axios.post(this.url + 'follow/' + this.userId)
+                axios.post(this.url + '/follow/' + this.userId)
                 .then(response => {
                     this.status = ! this.status;
                 })

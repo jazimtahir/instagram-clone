@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div id="app" class="container">
         <div class="row">
                 <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
                     <div>
@@ -16,10 +16,10 @@
                             </div>
                             <div>
                                 @if(auth()->user() == NULL)
-                                    <follow-button user-id="{{ $post->user->id }}" follow="{{ $follow }}"></follow-button>
+                                    <follow-button user-id="{{ $post->user->id }}" follow="{{ $follow }} " url="{{ url('/') }}"></follow-button>
                                 @else
                                     @if(auth()->user()->id != $post->user->id)
-                                        <follow-button user-id="{{ $post->user->id }}" follow="{{ $follow }}"></follow-button>
+                                        <follow-button user-id="{{ $post->user->id }}" follow="{{ $follow }}" url="{{ url('/') }}"></follow-button>
                                     @endif
                                 @endif
                             </div>
@@ -39,6 +39,21 @@
         <div class="row">
             <div class="col-12 col-sm-8 offset-sm-2  col-md-6 offset-md-3">
                 <img src="{{ asset('storage/' . $post->image) }}" class="w-100">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12 col-sm-8 offset-sm-2  col-md-6 offset-md-3 d-flex">
+                <div>
+                    <like-button url="{{ url('/') }}" post-id="{{ $post->id }}" like="{{ (auth()->user()) ? auth()->user()->liked->contains($post->id) : false }}"></like-button>
+                </div>
+                <div class="ml-2 font-weight-bold">
+                    {{ $post->likes->count() }} Likes
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12 col-sm-8 offset-sm-2  col-md-6 offset-md-3">
+                <comments url="{{ url('/') }}" post-id="{{ $post->id }}" user-api="{{ auth()->check() ? auth()->user()->api_token : 'NULL' }}" img-path="{{ $post->user->profile->profileImage() }}"></comments>
             </div>
         </div>
         <div class="row">
@@ -63,37 +78,48 @@
     </div>
 @endsection
 
+<!-- @section('scripts')
+<script>
 
+    const app = new Vue({
+        el: '#app',
+        data: {
+            commentBox: '',
+            comments: {},
+            post: {!! $post->toJson() !!},
+            user{!! auth()->check() ? auth()->user()->toJson() : 'NULL' !!}
+        },
 
+        mounted() {
+            alert('mounted');
+          this.getComments();
+        },
 
+        methods: {
+            getComments() {
+                axios.get('http://localhost/insta/api/posts/' + this.post.id + '/comments')
+                .then((response) => {
+                    this.comments = response.data
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            },
+            postComment() {
+                axios.post('http://localhost/insta/api/post/' + this.post.id + '/comment', {
+                    api_token : this.user.api_token,
+                    body: this.commentBox
+                })
+                .then((response) => {
+                    this.comments.unshift(response.data);
+                    this.commentBox = '';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            }
+        }
+    })
 
-
-
-
-
-
-
-
-
-
-{{--@extends('layouts.app')--}}
-
-{{--@section('content')--}}
-{{--<div class="container">--}}
-{{--    <div class="row">--}}
-{{--        <div class="col-5 offset-1">--}}
-{{--            <img src="{{ asset('storage/' . $post->image) }}" class="img-fluid">--}}
-{{--        </div>--}}
-{{--        <div class="col-6 d-flex">--}}
-{{--            <div>--}}
-{{--                <img src="../image/default.png" style="max-height: 50px;" class="rounded-circle img-fluid">--}}
-{{--            </div>--}}
-{{--            <div class="p-2">--}}
-{{--                <a href="{{URL::to('/')}}">--}}
-{{--                    <p><strong>{{ $post->user->username }}</strong></p>--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--@endsection--}}
+</script>
+@endsection -->
